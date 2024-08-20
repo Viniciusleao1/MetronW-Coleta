@@ -57,7 +57,33 @@ pip install -r requirements.txt
 
 Antes de executar o script, certifique-se de que o banco de dados MySQL está configurado corretamente e que o script login.py está com as credenciais e URLs ajustadas conforme suas necessidades.
 
-#### 5. Executar o Script
+#### 5. Importando o Arquivo SQL**
+
+Para importar o arquivo SQL, siga estes passos:
+
+1. **Selecione o arquivo:**
+   * Clique no botão "Escolher arquivo" e localize o arquivo `metronw-coleta.sql` no seu computador.
+
+   2. **Configure as opções:**
+   * **Formato:** Certifique-se que esteja definido como "SQL".
+   * **Delimitador:** Geralmente é `;`.
+   * **Encoding:** Selecione o encoding correto, normalmente UTF-8.
+
+3. **Inicie a importação:**
+   * Clique no botão "Executar". Você verá uma barra de progresso enquanto o processo ocorre.
+
+**Após a importação:**
+
+Uma vez que o arquivo SQL tenha sido importado com sucesso, você pode **remover o arquivo original** do seu computador. 
+
+**Lembre-se:** A segurança dos seus dados é fundamental. **Recomendamos que você crie uma cópia de segurança** do arquivo SQL em um local seguro e de fácil acesso, como o Google Drive ou Dropbox. Essa medida é essencial para garantir a recuperação dos seus dados em caso de problemas. 
+
+**Dica:** Utilize um serviço de armazenamento em nuvem para garantir a segurança e o acesso aos seus backups de qualquer lugar.
+
+
+
+
+#### 6. Executar o Script
 
 Para executar o script de coleta de dados, use o comando:
 
