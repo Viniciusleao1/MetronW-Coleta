@@ -14,7 +14,7 @@
 ```bash
 pip install -r requirements.txt
 
-🛠️ Guia de Uso 🎨
+## 🛠️ Guia de Uso 🎨
 
 Siga as etapas abaixo para configurar e executar o projeto:
 
