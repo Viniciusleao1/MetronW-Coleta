@@ -14,7 +14,7 @@
 ```bash
 pip install -r requirements.txt
 
-🛠️ **Guia de Uso** 🎨
+🛠️ Guia de Uso 🎨
 
 Siga as etapas abaixo para configurar e executar o projeto:
 
@@ -64,6 +64,6 @@ Para mais informações ou suporte, entre em contato com >Viniciusleao1.
 
 
 
-> Obrigado por conferir o projeto MetronW-Coleta! 🚀
+Obrigado por conferir o projeto MetronW-Coleta! 🚀
 
 
