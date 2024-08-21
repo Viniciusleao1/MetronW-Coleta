@@ -45,7 +45,7 @@ Crie e ative um ambiente virtual para isolar as dependências do projeto:
 
 python -m venv venv
 
-source venv/bin/activate  # No Windows, use: venv\Scripts\activate
+source venv/bin/activate  # No Windows, use: .\venv\Scripts\activate
 
 #### 3. Instalar Dependências
 
@@ -79,6 +79,7 @@ Uma vez que o arquivo SQL tenha sido importado com sucesso, você pode **remover
 **Lembre-se:** A segurança dos seus dados é fundamental. **Recomendamos que você crie uma cópia de segurança** do arquivo SQL em um local seguro e de fácil acesso, como o Google Drive ou Dropbox. Essa medida é essencial para garantir a recuperação dos seus dados em caso de problemas. 
 
 **Dica:** Utilize um serviço de armazenamento em nuvem para garantir a segurança e o acesso aos seus backups de qualquer lugar.
+
 
 
 
