@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/08/2024 às 21:59
+-- Tempo de geração: 23/08/2024 às 22:31
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -24,51 +24,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `empresas`
+-- Estrutura para tabela `aguardando`
 --
 
-CREATE TABLE `empresas` (
+CREATE TABLE `aguardando` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `phone` varchar(20) DEFAULT NULL,
-  `email` varchar(255) NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  `dueDate` datetime DEFAULT NULL,
-  `recurrence` varchar(255) DEFAULT NULL,
-  `planId` int(11) DEFAULT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL
+  `usuario_id` int(11) DEFAULT NULL,
+  `mensagem_id` int(11) DEFAULT NULL,
+  `last_message` text DEFAULT NULL,
+  `data_criacao` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `empresas`
+-- Despejando dados para a tabela `aguardando`
 --
 
-INSERT INTO `empresas` (`id`, `name`, `phone`, `email`, `status`, `dueDate`, `recurrence`, `planId`, `createdAt`, `updatedAt`) VALUES
-(1, 'Metro Network', NULL, 'ti@metronetwork.com.br', 1, '2093-03-14 03:00:00', NULL, NULL, '2024-06-01 21:14:59', '2024-06-01 21:14:59');
-
--- --------------------------------------------------------
-
---
--- Estrutura para tabela `filas`
---
-
-CREATE TABLE `filas` (
-  `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `message` text NOT NULL,
-  `status` varchar(50) NOT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `filas`
---
-
-INSERT INTO `filas` (`id`, `name`, `message`, `status`, `createdAt`, `updatedAt`) VALUES
-(23, 'Velonet - Metro - CSE', 'gracias.', 'pending', '2024-06-03 12:33:43', '2024-08-20 17:50:01'),
-(181, 'Metro X Free', 'Testando banco de dados', 'pending', '2024-08-19 13:33:21', '2024-08-20 18:00:40');
+INSERT INTO `aguardando` (`id`, `usuario_id`, `mensagem_id`, `last_message`, `data_criacao`) VALUES
+(1, 213, 216, 'os equipamentos foram configurados por nós? Teria o número do ticket desta configuração se sim?', '2024-08-23 13:49:45'),
+(2, 211, 211, 'Testando', '2024-08-23 13:13:31'),
+(4, 211, 211, 'Finalizando testes', '2024-08-23 13:13:31'),
+(6, 213, 216, 'Lá será o POP T36  - IBIRAPUÃ', '2024-08-23 13:49:45'),
+(7, 211, 211, 'Finalizando testes', '2024-08-23 13:13:31');
 
 -- --------------------------------------------------------
 
@@ -78,19 +54,21 @@ INSERT INTO `filas` (`id`, `name`, `message`, `status`, `createdAt`, `updatedAt`
 
 CREATE TABLE `mensagens` (
   `id` int(11) NOT NULL,
-  `fila_id` int(11) NOT NULL,
-  `message` text NOT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL
+  `ticket_id` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL,
+  `last_message` text DEFAULT NULL,
+  `data_criacao` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `mensagens`
 --
 
-INSERT INTO `mensagens` (`id`, `fila_id`, `message`, `createdAt`, `updatedAt`) VALUES
-(1, 181, 'Testando banco de dados', '2024-08-19 13:33:21', '2024-08-20 17:52:21'),
-(2, 181, 'Teste', '2024-08-19 13:33:21', '2024-08-20 18:00:40');
+INSERT INTO `mensagens` (`id`, `ticket_id`, `status`, `last_message`, `data_criacao`) VALUES
+(210, 0, 'pending', 'Testando', '2024-08-23 13:13:31'),
+(211, 211, 'pending', 'Finalizando testes', '2024-08-23 13:13:31'),
+(212, 216, 'pending', 'tudo certo ?', '2024-08-23 14:23:31'),
+(216, 213, 'pending', 'Lá será o POP T36  - IBIRAPUÃ', '2024-08-23 13:49:45');
 
 -- --------------------------------------------------------
 
@@ -100,94 +78,75 @@ INSERT INTO `mensagens` (`id`, `fila_id`, `message`, `createdAt`, `updatedAt`) V
 
 CREATE TABLE `usuarios` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `profile` varchar(50) NOT NULL,
-  `token` text NOT NULL,
-  `companyId` int(11) DEFAULT NULL
+  `nome` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `name`, `email`, `profile`, `token`, `companyId`) VALUES
-(42, 'freela', 'teste@teste.com.br', 'user', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2FybmFtZSI6ImZyZWVsYSIsInByb2ZpbGUiOiJ1c2VyIiwiaWQiOjQyLCJjb21wYW55SWQiOjEsImlhdCI6MTcyNDE3NDM4MSwiZXhwIjoxNzI0MTc1MjgxfQ._Rz0cIXjsOYMsM07GUt0EwtjOJAjzjGnqEe8b6HgV9M', 1);
+INSERT INTO `usuarios` (`id`, `nome`) VALUES
+(211, 'Metro X Free'),
+(213, 'TECNET/METRO CSE'),
+(216, 'Mendex / CSE');
 
 --
 -- Índices para tabelas despejadas
 --
 
 --
--- Índices de tabela `empresas`
+-- Índices de tabela `aguardando`
 --
-ALTER TABLE `empresas`
-  ADD PRIMARY KEY (`id`);
-
---
--- Índices de tabela `filas`
---
-ALTER TABLE `filas`
-  ADD PRIMARY KEY (`id`);
+ALTER TABLE `aguardando`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `usuario_id` (`usuario_id`),
+  ADD KEY `mensagem_id` (`mensagem_id`);
 
 --
 -- Índices de tabela `mensagens`
 --
 ALTER TABLE `mensagens`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fila_id` (`fila_id`);
+  ADD UNIQUE KEY `ticket_id` (`ticket_id`);
 
 --
 -- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `companyId` (`companyId`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
--- AUTO_INCREMENT de tabela `empresas`
+-- AUTO_INCREMENT de tabela `aguardando`
 --
-ALTER TABLE `empresas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
---
--- AUTO_INCREMENT de tabela `filas`
---
-ALTER TABLE `filas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
+ALTER TABLE `aguardando`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de tabela `mensagens`
 --
 ALTER TABLE `mensagens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=217;
 
 --
 -- Restrições para tabelas despejadas
 --
 
 --
--- Restrições para tabelas `mensagens`
+-- Restrições para tabelas `aguardando`
 --
-ALTER TABLE `mensagens`
-  ADD CONSTRAINT `mensagens_ibfk_1` FOREIGN KEY (`fila_id`) REFERENCES `filas` (`id`);
-
---
--- Restrições para tabelas `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD CONSTRAINT `usuarios_ibfk_1` FOREIGN KEY (`companyId`) REFERENCES `empresas` (`id`);
+ALTER TABLE `aguardando`
+  ADD CONSTRAINT `aguardando_ibfk_1` FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`),
+  ADD CONSTRAINT `aguardando_ibfk_2` FOREIGN KEY (`mensagem_id`) REFERENCES `mensagens` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
