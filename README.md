@@ -57,7 +57,7 @@ pip install -r requirements.txt
 
 Antes de executar o script, certifique-se de que o banco de dados MySQL está configurado corretamente e que o script login.py está com as credenciais e URLs ajustadas conforme suas necessidades.
 
-#### 5. Importando o Arquivo SQL
+#### 5. Importando o Arquivo SQL**
 
 Para importar o arquivo SQL, siga estes passos:
 
