@@ -104,4 +104,4 @@ Para mais informações ou suporte, entre em contato com Viniciusleao1.
 
 
 
-#### Obrigado por conferir o projeto MetronW-Coleta! 🚀
+#### Obrigado por conferir o projeto MetronW-Coleta! 
