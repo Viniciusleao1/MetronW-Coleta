@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 23/08/2024 às 22:31
+-- Tempo de geração: 24/08/2024 às 02:41
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -44,7 +44,11 @@ INSERT INTO `aguardando` (`id`, `usuario_id`, `mensagem_id`, `last_message`, `da
 (2, 211, 211, 'Testando', '2024-08-23 13:13:31'),
 (4, 211, 211, 'Finalizando testes', '2024-08-23 13:13:31'),
 (6, 213, 216, 'Lá será o POP T36  - IBIRAPUÃ', '2024-08-23 13:49:45'),
-(7, 211, 211, 'Finalizando testes', '2024-08-23 13:13:31');
+(7, 211, 211, 'Finalizando testes', '2024-08-23 13:13:31'),
+(9, 211, 211, 'Analise', '2024-08-23 13:13:31'),
+(10, 211, 211, 'Análise secundária', '2024-08-23 13:13:31'),
+(11, 211, 211, 'Testando 2', '2024-08-23 13:13:31'),
+(12, 211, 211, 'Teste', '2024-08-23 13:13:31');
 
 -- --------------------------------------------------------
 
@@ -66,9 +70,29 @@ CREATE TABLE `mensagens` (
 
 INSERT INTO `mensagens` (`id`, `ticket_id`, `status`, `last_message`, `data_criacao`) VALUES
 (210, 0, 'pending', 'Testando', '2024-08-23 13:13:31'),
-(211, 211, 'pending', 'Finalizando testes', '2024-08-23 13:13:31'),
+(211, 211, 'pending', 'Teste', '2024-08-23 13:13:31'),
 (212, 216, 'pending', 'tudo certo ?', '2024-08-23 14:23:31'),
 (216, 213, 'pending', 'Lá será o POP T36  - IBIRAPUÃ', '2024-08-23 13:49:45');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `quantidades`
+--
+
+CREATE TABLE `quantidades` (
+  `id` int(11) NOT NULL,
+  `ticket_id` int(11) NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `quantidades`
+--
+
+INSERT INTO `quantidades` (`id`, `ticket_id`, `quantidade`, `timestamp`) VALUES
+(1, 0, 28, '2024-08-24 00:35:52');
 
 -- --------------------------------------------------------
 
@@ -110,6 +134,13 @@ ALTER TABLE `mensagens`
   ADD UNIQUE KEY `ticket_id` (`ticket_id`);
 
 --
+-- Índices de tabela `quantidades`
+--
+ALTER TABLE `quantidades`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `ticket_id` (`ticket_id`);
+
+--
 -- Índices de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -123,13 +154,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `aguardando`
 --
 ALTER TABLE `aguardando`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de tabela `mensagens`
 --
 ALTER TABLE `mensagens`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=228;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=237;
+
+--
+-- AUTO_INCREMENT de tabela `quantidades`
+--
+ALTER TABLE `quantidades`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
