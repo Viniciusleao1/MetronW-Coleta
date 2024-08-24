@@ -1,6 +1,7 @@
 import requests
 import mysql.connector
-from datetime import datetime, timedelta
+from datetime import datetime
+import pytz
 
 url_login_post = 'https://wa-api.metronw.com.br/auth/login'
 
@@ -16,11 +17,12 @@ headers = {
     'Content-Type': 'application/json',
 }
 
-def convert_to_utc_minus_3(timestamp):
+def convert_to_sp_timezone(timestamp):
     if timestamp:
         utc_time = datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S.%fZ')
-        utc_minus_3_time = utc_time - timedelta(hours=3)
-        return utc_minus_3_time.strftime('%Y-%m-%d %H:%M:%S')
+        sp_timezone = pytz.timezone('America/Sao_Paulo')
+        sp_time = utc_time.astimezone(sp_timezone)
+        return sp_time.strftime('%Y-%m-%d %H:%M:%S')
     return None
 
 response = session.post(url_login_post, json=login_data, headers=headers)
@@ -88,8 +90,8 @@ if response.status_code == 200:
                     status = message.get('status', 'unknown')
                     last_message = message.get('lastMessage', '')
                     unread_messages = message.get('unreadMessages', 0)
-                    created_at = convert_to_utc_minus_3(message.get('createdAt'))
-                    updated_at = convert_to_utc_minus_3(message.get('updatedAt'))
+                    created_at = convert_to_sp_timezone(message.get('createdAt'))
+                    updated_at = convert_to_sp_timezone(message.get('updatedAt'))
 
                     if None in [ticket_id, status, last_message, created_at]:
                         print(f"Dados inválidos para a mensagem: {message}")
