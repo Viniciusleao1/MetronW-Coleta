@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 24/08/2024 às 06:14
+-- Tempo de geração: 24/08/2024 às 07:02
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -30,11 +30,6 @@ SET time_zone = "+00:00";
 CREATE TABLE `aguardando` (
   `id` int(11) NOT NULL,
   `grupo_id` int(11) DEFAULT NULL,
-  `mensagens_nao_lidas` int(11) DEFAULT NULL,
-  `ultima_mensagem` text DEFAULT NULL,
-  `data_ultima_mensagem` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `data_criacao` timestamp NOT NULL DEFAULT current_timestamp(),
-  `data_atualizacao` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `quantidade` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -42,10 +37,8 @@ CREATE TABLE `aguardando` (
 -- Despejando dados para a tabela `aguardando`
 --
 
-INSERT INTO `aguardando` (`id`, `grupo_id`, `mensagens_nao_lidas`, `ultima_mensagem`, `data_ultima_mensagem`, `data_criacao`, `data_atualizacao`, `quantidade`) VALUES
-(1, 211, 34, 'Testando', '2024-08-24 07:12:23', '2024-08-24 02:41:17', '2024-08-24 04:13:09', 0),
-(6, 225, 61, 'Prezado Cliente, caso não venha lhe responder em tempo hábil, favor contatar nossos canais oficiais de atendimento: WhatsApp (através de seu canal), WhatsApp (047) 3047-8400, E-mail (cse@metronetwork.com.br) ou Telefone (047) 3047-8400. Somos gratos pela sua compreensão e apoio.', '2024-08-24 03:58:37', '2024-08-24 03:12:33', '2024-08-24 03:58:37', 0),
-(14, 227, 6, '*Thulio Araujo:*\nperfecto gracias vazquez', '2024-08-24 03:58:37', '2024-08-24 03:23:02', '2024-08-24 03:58:37', 0);
+INSERT INTO `aguardando` (`id`, `grupo_id`, `quantidade`) VALUES
+(71, NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -92,7 +85,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de tabela `aguardando`
 --
 ALTER TABLE `aguardando`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
