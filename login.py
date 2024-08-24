@@ -60,6 +60,16 @@ if response.status_code == 200:
         )
         cursor = connection.cursor()
 
+        cursor.execute("SHOW COLUMNS FROM aguardando LIKE 'conversas'")
+        result = cursor.fetchone()
+
+        if result:
+
+            cursor.execute("""
+            ALTER TABLE aguardando CHANGE COLUMN conversas quantidade INT;
+            """)
+            connection.commit()
+
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS aguardando (
             id INT AUTO_INCREMENT PRIMARY KEY,
@@ -69,13 +79,13 @@ if response.status_code == 200:
             data_ultima_mensagem TIMESTAMP,
             data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-            conversas INT,  -- Armazena o total de grupos processados
+            quantidade INT,  -- Armazena o total de grupos em espera
             UNIQUE KEY(grupo_id)
         )
         """)
         connection.commit()
 
-        total_grupos = 0
+        total_grupos_espera = 0
 
         for endpoint in endpoints:
             messages_response = session.get(endpoint, headers=headers)
@@ -93,7 +103,9 @@ if response.status_code == 200:
                     print("A resposta do endpoint é uma lista, processando...")
                     for whatsapp_data in messages:
                         if 'queues' in whatsapp_data:
-                            total_grupos += len([queue for queue in whatsapp_data['queues'] if queue.get('id')])
+                            
+                            grupos_em_espera = [queue for queue in whatsapp_data['queues'] if queue.get('id') and 'espera' in queue.get('name').lower()]
+                            total_grupos_espera += len(grupos_em_espera)
                     continue
 
                 for message in messages.get('tickets', []):
@@ -102,15 +114,15 @@ if response.status_code == 200:
                     ultima_mensagem = message.get('lastMessage', '')
                     data_ultima_mensagem = convert_to_sp_timezone(message.get('updatedAt'))
 
-                    if message.get('isGroup'):
-                        total_grupos += 1
+                    if 'espera' in message.get('status', '').lower():
+                        total_grupos_espera += 1
 
                     if None in [grupo_id, ultima_mensagem, data_ultima_mensagem]:
                         print(f"Dados inválidos para a mensagem: {message}")
                         continue
 
                     aguardando_query = """
-                    INSERT INTO aguardando (grupo_id, mensagens_nao_lidas, ultima_mensagem, data_ultima_mensagem, conversas)
+                    INSERT INTO aguardando (grupo_id, mensagens_nao_lidas, ultima_mensagem, data_ultima_mensagem, quantidade)
                     VALUES (%s, %s, %s, %s, %s)
                     ON DUPLICATE KEY UPDATE 
                         mensagens_nao_lidas=VALUES(mensagens_nao_lidas), 
@@ -118,7 +130,7 @@ if response.status_code == 200:
                         data_ultima_mensagem=VALUES(data_ultima_mensagem), 
                         data_atualizacao=CURRENT_TIMESTAMP
                     """
-                    aguardando_values = (grupo_id, mensagens_nao_lidas, ultima_mensagem, data_ultima_mensagem, total_grupos)
+                    aguardando_values = (grupo_id, mensagens_nao_lidas, ultima_mensagem, data_ultima_mensagem, total_grupos_espera)
                     print(f"Inserindo dados na tabela 'aguardando': {aguardando_values}")
                     cursor.execute(aguardando_query, aguardando_values)
 
@@ -129,11 +141,11 @@ if response.status_code == 200:
                 print(f"Status Code: {messages_response.status_code}")
                 print(messages_response.text)
 
-        update_conversas_query = "UPDATE aguardando SET conversas = %s"
-        cursor.execute(update_conversas_query, (total_grupos,))
+        update_quantidade_query = "UPDATE aguardando SET quantidade = %s"
+        cursor.execute(update_quantidade_query, (total_grupos_espera,))
         connection.commit()
 
-        print(f"Total de grupos processados: {total_grupos}")
+        print(f"Total de grupos em espera: {total_grupos_espera}")
 
     except requests.exceptions.JSONDecodeError as e:
         print(f"Erro ao decodificar JSON: {e}")
