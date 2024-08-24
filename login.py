@@ -50,7 +50,6 @@ if response.status_code == 200:
     cursor = None
 
     try:
-
         connection = mysql.connector.connect(
             host='localhost',
             user='root',
@@ -58,6 +57,15 @@ if response.status_code == 200:
             database='metronw-coleta'
         )
         cursor = connection.cursor()
+
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS quantidades (
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            quantidade INT,
+            timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+        """)
+        connection.commit()
 
         for endpoint in endpoints:
             messages_response = session.get(endpoint, headers=headers)
@@ -79,12 +87,22 @@ if response.status_code == 200:
                     ticket_id = message.get('id')
                     status = message.get('status', 'unknown')
                     last_message = message.get('lastMessage', '')
+                    unread_messages = message.get('unreadMessages', 0)
                     created_at = convert_to_utc_minus_3(message.get('createdAt'))
                     updated_at = convert_to_utc_minus_3(message.get('updatedAt'))
 
                     if None in [ticket_id, status, last_message, created_at]:
                         print(f"Dados inválidos para a mensagem: {message}")
                         continue
+
+                    quantidades_query = """
+                    INSERT INTO quantidades (quantidade)
+                    VALUES (%s)
+                    ON DUPLICATE KEY UPDATE quantidade=VALUES(quantidade), timestamp=CURRENT_TIMESTAMP
+                    """
+                    quantidades_values = (unread_messages,)
+                    print(f"Inserindo quantidade na tabela 'quantidades': {quantidades_values}")
+                    cursor.execute(quantidades_query, quantidades_values)
 
                     mensagens_query = """
                     INSERT INTO mensagens (ticket_id, status, last_message, data_criacao)
